@@ -15,8 +15,6 @@ foreman:
   client_ssl_ca: /etc/foreman/proxy_ca.pem
   client_ssl_cert: /etc/foreman/client_cert.pem
   client_ssl_key: /etc/foreman/client_key.pem
-  configure_epel_repo: false
-  configure_scl_repo: false
   initial_location: Default Location
   initial_organization: Default Organization
   max_keepalive_requests: 10000
@@ -49,12 +47,14 @@ foreman::plugin::ansible: false
 foreman::plugin::azure: false
 foreman::plugin::bootdisk: false
 foreman::plugin::chef: false
+foreman::plugin::column_view: false
 foreman::plugin::default_hostgroup: false
 foreman::plugin::digitalocean: false
 foreman::plugin::discovery: false
 foreman::plugin::expire_hosts: false
 foreman::plugin::hooks: false
 foreman::plugin::kubevirt: false
+foreman::plugin::leapp: false
 foreman::plugin::memcache: false
 foreman::plugin::monitoring: false
 foreman::plugin::openscap: false
@@ -65,6 +65,7 @@ foreman::plugin::rh_cloud: false
 foreman::plugin::salt: false
 foreman::plugin::setup: false
 foreman::plugin::snapshot_management: false
+foreman::plugin::statistics: false
 foreman::plugin::tasks: true
 foreman::plugin::templates: false
 foreman::plugin::virt_who_configure: false
@@ -89,8 +90,10 @@ foreman_proxy::plugin::pulp:
   pulpcore_enabled: true
 foreman_proxy::plugin::remote_execution::ssh: false
 foreman_proxy::plugin::salt: false
-foreman_proxy_content: true
-katello: true
+foreman_proxy_content:
+  proxy_pulp_yum_to_pulpcore: true
+katello:
+  use_pulp_2_for_yum: false
 puppet:
   server: true
   server_environments_owner: apache

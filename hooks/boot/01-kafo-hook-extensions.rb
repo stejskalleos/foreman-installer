@@ -45,20 +45,48 @@ module HookContextExtension
     module_enabled?('foreman')
   end
 
+  def katello_enabled?
+    module_enabled?('katello')
+  end
+
+  def katello_present?
+    module_present?('katello')
+  end
+
   def devel_scenario?
     module_enabled?('katello_devel')
   end
 
+  def local_foreman_db?
+    foreman_server? && param_value('foreman', 'db_manage')
+  end
+
+  def local_candlepin_db?
+    candlepin_enabled? && param_value('katello', 'candlepin_manage_db')
+  end
+
   def local_postgresql?
-    param_value('foreman', 'db_manage') || param_value('katello', 'candlepin_manage_db') || devel_scenario?
+    local_foreman_db? || local_candlepin_db? || devel_scenario?
   end
 
   def local_redis?
     (foreman_server? && !param_value('foreman', 'jobs_sidekiq_redis_url')) || pulpcore_enabled? || devel_scenario?
   end
 
+  def candlepin_enabled?
+    katello_enabled?
+  end
+
+  def pulp_enabled?
+    module_enabled?('foreman_proxy_plugin_pulp') && (param_value('foreman_proxy_plugin_pulp', 'pulpnode_enabled') || param_value('foreman_proxy_plugin_pulp', 'enabled'))
+  end
+
+  def pulp_present?
+    module_present?('foreman_proxy_plugin_pulp')
+  end
+
   def pulpcore_enabled?
-    param_value('foreman_proxy_plugin_pulp', 'pulpcore_enabled')
+    module_enabled?('foreman_proxy_plugin_pulp') && param_value('foreman_proxy_plugin_pulp', 'pulpcore_enabled')
   end
 
   def needs_postgresql_scl_upgrade?
@@ -74,6 +102,8 @@ module HookContextExtension
             when :error
               'bad'
             when :debug
+              'yellow'
+            when :warn
               'yellow'
             else
               level
@@ -97,20 +127,46 @@ module HookContextExtension
   end
 
   def execute_command(command, do_say, do_log)
-    IO.popen("#{command} 2>&1") do |io|
-      while (line = io.gets)
-        line.chomp!
-        log_and_say(:debug, line, do_say, do_log)
-      end
-      io.close
-      if $CHILD_STATUS.success?
-        log_and_say(:debug, "#{command} finished successfully!", do_say, do_log)
-      else
-        log_and_say(:error, "#{command} failed! Check the output for error!", do_say, do_log)
-      end
-      $CHILD_STATUS.success?
+    log_and_say(:debug, "Executing: #{command}", do_say, do_log)
+
+    begin
+      stdout_stderr, status = Open3.capture2e(*Kafo::PuppetCommand.format_command(command))
+    rescue Errno::ENOENT
+      log_and_say(:error, "Command #{command} not found", do_say, do_log)
+      return false
     end
+
+    stdout_stderr.lines.map(&:chomp).each do |line|
+      log_and_say(:debug, line, do_say, do_log)
+    end
+
+    if status.success?
+      log_and_say(:debug, "#{command} finished successfully!", do_say, do_log)
+    else
+      log_and_say(:error, "#{command} failed! Check the output for error!", do_say, do_log)
+    end
+    status.success?
   end
+end
+
+def remote_host?(hostname)
+  !['localhost', '127.0.0.1', `hostname`.strip].include?(hostname)
+end
+
+def load_mongo_config
+  seeds = param_value('katello', 'pulp_db_seeds')
+  seed = seeds.split(',').first
+  host, port = seed.split(':') if seed
+  {
+    host: host || 'localhost',
+    port: port || '27017',
+    database: param_value('katello', 'pulp_db_name') || 'pulp_database',
+    username: param_value('katello', 'pulp_db_username'),
+    password: param_value('katello', 'pulp_db_password'),
+    ssl: param_value('katello', 'pulp_db_ssl') || false,
+    ca_path: param_value('katello', 'pulp_db_ca_path'),
+    ssl_certfile: param_value('katello', 'pulp_db_ssl_certfile'),
+  }
 end
 
 Kafo::HookContext.send(:include, HookContextExtension)

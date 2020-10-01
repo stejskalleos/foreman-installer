@@ -1,18 +1,19 @@
 AllCops:
-  TargetRubyVersion: 2.0
+  TargetRubyVersion: 2.5
   Exclude:
     - '_build/**/*'
     - 'pkg/**/*'
     - 'Gemfile'
     - 'Puppetfile'
+    - 'Rakefile'
 
 Bundler/OrderedGems:
   Enabled: false
 
-Layout/AlignHash:
+Layout/HashAlignment:
   Enabled: false
 
-Layout/AlignParameters:
+Layout/ParameterAlignment:
   Enabled: false
 
 Layout/DotPosition:
@@ -23,15 +24,6 @@ Metrics:
 
 Naming/FileName:
   Enabled: false
-
-Performance/Casecmp:
-  Enabled: false
-
-Performance/RedundantMatch:
-  Enabled: true
-
-Performance/RedundantMerge:
-  Enabled: true
 
 Style/Alias:
   EnforcedStyle: prefer_alias_method
@@ -64,9 +56,18 @@ Style/FrozenStringLiteralComment:
 Style/GuardClause:
   Enabled: false
 
+Style/HashEachMethods:
+  Enabled: true
+
 # Support both, Ruby 1.9 hashmap and hash-rocket syntax
 Style/HashSyntax:
   Enabled: false
+
+Style/HashTransformKeys:
+  Enabled: true
+
+Style/HashTransformValues:
+  Enabled: true
 
 Style/IfUnlessModifier:
   Enabled: false
@@ -98,9 +99,30 @@ Style/StringLiterals:
 Style/TernaryParentheses:
   EnforcedStyle: require_parentheses_when_complex
 
-Style/TrailingCommaInLiteral:
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: comma
 
 #Allow both ['a', 'b'], %w[a b] and %w(a b) style arrays
 Style/WordArray:
+  Enabled: false
+
+Layout/LineLength:
+  Enabled: false
+
+Style/SafeNavigation:
+  Enabled: false
+
+Style/StderrPuts:
+  Enabled: false
+
+Lint/SendWithMixinArgument:
+  Enabled: false
+
+Style/NumericPredicate:
+  Enabled: false
+
+Layout/HeredocIndentation:
   Enabled: false

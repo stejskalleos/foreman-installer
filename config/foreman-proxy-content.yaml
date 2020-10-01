@@ -12,8 +12,6 @@
 :hook_dirs: ['./katello/hooks']
 :parser_cache_path: ./_build/parser_cache/foreman-proxy-content.yaml
 :hiera_config: ./config/foreman-hiera.yaml
-:facts:
-  tuning: 'default'
 
 :order:
   - certs

@@ -9,8 +9,7 @@
 #
 # See params.pp in each class for what options are available
 ---
-foreman:
-  configure_epel_repo: false
+foreman: {}
 foreman::cli: true
 foreman::cli::ansible: false
 foreman::cli::azure: false
@@ -31,6 +30,7 @@ foreman::plugin::ansible: false
 foreman::plugin::azure: false
 foreman::plugin::bootdisk: false
 foreman::plugin::chef: false
+foreman::plugin::column_view: false
 foreman::plugin::default_hostgroup: false
 foreman::plugin::dhcp_browser: false
 foreman::plugin::digitalocean: false
@@ -39,6 +39,7 @@ foreman::plugin::expire_hosts: false
 foreman::plugin::hooks: false
 foreman::plugin::host_extra_validator: false
 foreman::plugin::kubevirt: false
+foreman::plugin::leapp: false
 foreman::plugin::memcache: false
 foreman::plugin::monitoring: false
 foreman::plugin::omaha: false
@@ -50,6 +51,7 @@ foreman::plugin::remote_execution::cockpit: false
 foreman::plugin::salt: false
 foreman::plugin::setup: false
 foreman::plugin::snapshot_management: false
+foreman::plugin::statistics: false
 foreman::plugin::tasks: false
 foreman::plugin::templates: false
 foreman_proxy: {}

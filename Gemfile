@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'kafo', '~> 4.1'
+gem 'kafo', '~> 5.1'
 gem 'librarian-puppet'
 gem 'puppet', ENV.key?('PUPPET_VERSION') ? "~> #{ENV['PUPPET_VERSION']}" : '~> 6.0'
 gem 'facter', '>= 3.0'
@@ -10,7 +10,7 @@ gem 'rake'
 
 group :test do
   gem 'rspec'
-  gem 'rubocop', '~> 0.50.0'
+  gem 'rubocop', '~> 0.80.0'
 end
 
 group :development do

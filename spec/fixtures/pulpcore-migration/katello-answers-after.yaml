@@ -11,6 +11,7 @@ foreman::compute::ovirt: false
 foreman::compute::rackspace: false
 foreman::compute::vmware: false
 foreman::plugin::azure: false
+foreman::plugin::column_view: false
 foreman::plugin::digitalocean: false
 foreman::plugin::expire_hosts: false
 foreman::plugin::kubevirt: false
@@ -21,6 +22,7 @@ foreman::plugin::remote_execution::cockpit: false
 foreman::plugin::rh_cloud: false
 foreman::plugin::salt: false
 foreman::plugin::snapshot_management: false
+foreman::plugin::statistics: false
 foreman::plugin::virt_who_configure: false
 foreman_proxy::plugin::chef: false
 foreman_proxy::plugin::dhcp::remote_isc: false
@@ -31,6 +33,8 @@ foreman_proxy::plugin::pulp:
 foreman_proxy::plugin::salt: false
 foreman_proxy_content:
   proxy_pulp_isos_to_pulpcore: false
+  proxy_pulp_yum_to_pulpcore: false
 katello:
   use_pulp_2_for_docker: true
   use_pulp_2_for_file: true
+  use_pulp_2_for_yum: true
